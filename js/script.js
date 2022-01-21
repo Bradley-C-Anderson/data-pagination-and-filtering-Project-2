@@ -14,12 +14,30 @@ document.addEventListener('DOMContentLoaded', () => {
       element[property] = value;
       return element;
    }
+   //function removeElementsByClass found on Stack Overflow by Miguel Mota
+   //https://stackoverflow.com/questions/34193751/js-remove-last-child
+
+   function removeElementsByClass(className){
+      const elements = document.getElementsByClassName(className);
+      while(elements.length > 0){
+          elements[0].parentNode.removeChild(elements[0]);
+      }
+  }
    
-   let currPageNum = 0;
+   let currPageNum = 1;
    showPage(currPageNum);
    function showPage(pageNum){
-      pageNum = pageNum * numPerPage;
-      for(let i = pageNum; i < pageNum + numPerPage; i++){
+      let currNumPerPage = numPerPage;
+      //remove previous page
+      removeElementsByClass('student-item cf');
+      //where to start the next page
+      const startingPosition = (pageNum - 1) * currNumPerPage;
+      //if you're on the last page on show the leftovers
+      if(pageNum === numPages){
+         currNumPerPage = endNumStudent % numPerPage;
+      }
+      //loop through the data to create items per page.
+      for(let i = startingPosition; i < startingPosition + currNumPerPage; i++){
          const li = createElement('li', 'className', 'student-item cf');
          ul.appendChild(li);
 
@@ -44,28 +62,27 @@ document.addEventListener('DOMContentLoaded', () => {
          joined.innerHTML = `Joined ${data[i].registered.date}`;
          div2.appendChild(joined)
       }
+      //if (currPageNum + 1 === numPages){
+         //ul.removeChild(ul.lastChild);
+      //}
 }
 
-function removeLastPage(){
-   
-   // for(let i = 0; i < ul.children.length; i++){
-   //    ul.removeChild;
-   // }
-}
+
 //create page buttons
    const ulPage = document.querySelector('.pagination');
+   
    for(let i = 0; i < numPages; i++){
       const pageButton = createElement('button', 'textContent', `${i+1}`);
       ulPage.appendChild(pageButton);
 
       ulPage.addEventListener('click', (e) => {
          if (e.target.textContent === `${i+1}`){
-            showPage(i);
+            showPage((i + 1));
          }
       });
    }
 
-//ul.removeChild('li');
+
 
 /*
 For assistance:
