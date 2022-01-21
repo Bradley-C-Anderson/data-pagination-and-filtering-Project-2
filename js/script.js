@@ -23,9 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
           elements[0].parentNode.removeChild(elements[0]);
       }
   }
-   
+   //load the first page when page is opened
    let currPageNum = 1;
    showPage(currPageNum);
+
+   
    function showPage(pageNum){
       let currNumPerPage = numPerPage;
       //remove previous page
@@ -62,25 +64,37 @@ document.addEventListener('DOMContentLoaded', () => {
          joined.innerHTML = `Joined ${data[i].registered.date}`;
          div2.appendChild(joined)
       }
-      //if (currPageNum + 1 === numPages){
-         //ul.removeChild(ul.lastChild);
-      //}
 }
 
 
 //create page buttons
-   const ulPage = document.querySelector('.pagination');
+   const ulPage = document.querySelector('.link-list');
    
    for(let i = 0; i < numPages; i++){
-      const pageButton = createElement('button', 'textContent', `${i+1}`);
-      ulPage.appendChild(pageButton);
-
-      ulPage.addEventListener('click', (e) => {
-         if (e.target.textContent === `${i+1}`){
-            showPage((i + 1));
-         }
-      });
+      const listElement = document.createElement('li');
+      ulPage.appendChild(listElement);
+      //const button = createElement('button', 'textContent', `${i + 1}`)
+      const button = createElement('button', 'type', `button`)
+      button.textContent = i + 1;
+      ulPage.children[i].appendChild(button);
    }
+
+
+
+//get an array of all the buttons and set the first one to active
+const pageButtons = document.querySelectorAll('button');
+pageButtons[0].className = 'active';
+
+//When click page buttons remove active class from current and add it to the clicked page.
+   for(const item of pageButtons){
+      item.addEventListener('click', (e) => { 
+         ulPage.children[currPageNum - 1].firstChild.className = '';
+         currPageNum = +(e.target.textContent);
+         showPage(currPageNum);
+         ulPage.children[currPageNum - 1].firstChild.className = 'active';
+      });
+}
+
 
 
 
