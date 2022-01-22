@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
    let endNumStudent = data.length;
    let startNumStudent = 0;
    const numPerPage = 9;
-   const numPages = Math.ceil(endNumStudent/numPerPage);
+   let numPages = Math.ceil(endNumStudent/numPerPage);
 
    function createElement(elementName, property, value){
       const element = document.createElement(elementName);
@@ -35,11 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
    imgButton.alt = 'Search icon';
    searchButton.appendChild(imgButton);
    const form = document.getElementById('registrar');
+   //end of search function setting
 
+   //search function listener
    input.addEventListener('input', (e) => {
-      e.preventDefault();
+      //e.preventDefault();
       let searchArray = [];
-      console.clear();
       for(let i = 0; i < data.length; i++){
          //console.log(input.value);
          
@@ -48,11 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
          const inputValue = input.value.toLowerCase();
          if (firstName.indexOf(inputValue) >=0 || lastName.indexOf(inputValue) >=0 ){
             searchArray.push(data[i]);
-         }
+            numPages = Math.ceil(searchArray.length/numPerPage);
+         } 
+         
       }
-      console.log(searchArray);
-
-
+      showPage(1, searchArray)
    }); 
 
    //function removeElementsByClass found on Stack Overflow by Miguel Mota
@@ -65,10 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   }
 
-
-   
+   //function to create a page of students
    function showPage(pageNum, data){
       let currNumPerPage = numPerPage;
+      endNumStudent = data.length;
       //remove previous page
       removeElementsByClass('student-item cf');
       //where to start the next page
@@ -108,7 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //create page buttons
    const ulPage = document.querySelector('.link-list');
-   
+   console.log('in button');
+   console.log(numPages);
    for(let i = 0; i < numPages; i++){
       const listElement = document.createElement('li');
       ulPage.appendChild(listElement);
@@ -163,7 +165,7 @@ This function will create and insert/append the elements needed for the paginati
 // Call functions
    //load the first page when page is opened
    let currPageNum = 1;
-   showPage(currPageNum, data);
+   showPage(currPageNum,data);
 
 
 
