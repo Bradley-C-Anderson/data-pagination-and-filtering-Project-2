@@ -3,12 +3,14 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 document.addEventListener('DOMContentLoaded', () => {
+   //Global Variables
    const ul = document.querySelector('.student-list');
    let endNumStudent = data.length;
    let startNumStudent = 0;
    const numPerPage = 9;
    let numPages = Math.ceil(endNumStudent/numPerPage);
 
+   //
    function createElement(elementName, property, value){
       const element = document.createElement(elementName);
       element[property] = value;
@@ -74,9 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
       removeElementsByClass('student-item cf');
       //where to start the next page
       const startingPosition = (pageNum - 1) * currNumPerPage;
+      numPages = Math.ceil(endNumStudent/currNumPerPage);
       //if you're on the last page on show the leftovers
       if(pageNum === numPages){
-         currNumPerPage = endNumStudent % numPerPage;
+         currNumPerPage = endNumStudent % currNumPerPage;
       }
       //loop through the data to create items per page.
       for(let i = startingPosition; i < startingPosition + currNumPerPage; i++){
@@ -108,11 +111,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 //create page buttons
+
    const ulPage = document.querySelector('.link-list');
    console.log('in button');
    console.log(numPages);
+
+  
    for(let i = 0; i < numPages; i++){
-      const listElement = document.createElement('li');
+      const listElement = createElement('li', 'className', 'button-list');
       ulPage.appendChild(listElement);
       //const button = createElement('button', 'textContent', `${i + 1}`)
       const button = createElement('button', 'type', `button`)
