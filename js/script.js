@@ -4,7 +4,7 @@ FSJS Project 2 - Data Pagination and Filtering
 */
 document.addEventListener('DOMContentLoaded', () => {
    const ul = document.querySelector('.student-list');
-   const endNumStudent = data.length;
+   let endNumStudent = data.length;
    let startNumStudent = 0;
    const numPerPage = 9;
    const numPages = Math.ceil(endNumStudent/numPerPage);
@@ -38,7 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
    input.addEventListener('input', (e) => {
       e.preventDefault();
-      console.log('Input!!!')
+      let searchArray = [];
+      console.clear();
+      for(let i = 0; i < data.length; i++){
+         //console.log(input.value);
+         
+         const firstName = data[i].name.first.toLowerCase();
+         const lastName = data[i].name.last.toLowerCase();
+         const inputValue = input.value.toLowerCase();
+         if (firstName.indexOf(inputValue) >=0 || lastName.indexOf(inputValue) >=0 ){
+            searchArray.push(data[i]);
+         }
+      }
+      console.log(searchArray);
+
 
    }); 
 
@@ -51,12 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
           elements[0].parentNode.removeChild(elements[0]);
       }
   }
-   //load the first page when page is opened
-   let currPageNum = 1;
-   showPage(currPageNum);
+
 
    
-   function showPage(pageNum){
+   function showPage(pageNum, data){
       let currNumPerPage = numPerPage;
       //remove previous page
       removeElementsByClass('student-item cf');
@@ -119,7 +130,7 @@ pageButtons[0].className = 'page-button active';
       item.addEventListener('click', (e) => { 
          ulPage.children[currPageNum - 1].firstChild.className = 'page-button';
          currPageNum = +(e.target.textContent);
-         showPage(currPageNum);
+         showPage(currPageNum, data);
          ulPage.children[currPageNum - 1].firstChild.className = 'page-button active';
       });
 }
@@ -150,7 +161,9 @@ This function will create and insert/append the elements needed for the paginati
 
 
 // Call functions
-
+   //load the first page when page is opened
+   let currPageNum = 1;
+   showPage(currPageNum, data);
 
 
 
