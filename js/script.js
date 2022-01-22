@@ -14,6 +14,34 @@ document.addEventListener('DOMContentLoaded', () => {
       element[property] = value;
       return element;
    }
+
+
+   /*
+      This section is for the search function
+   */
+   const header = document.getElementsByClassName('header');
+   const label = createElement('label', 'className', 'student-search');
+   //label.className = 'student-search';
+   header[0].appendChild(label);
+   const span = createElement('span', 'innerHTML', 'Search by name');
+   label.appendChild(span);
+   const input = createElement('input', 'id', 'search');
+   input.placeholder = 'Search by name...';
+   input.type = 'text';
+   label.appendChild(input);
+   const searchButton = createElement('button', 'type', 'button');
+   label.appendChild(searchButton);
+   const imgButton = createElement('img', 'src', 'img/icn-search.svg');
+   imgButton.alt = 'Search icon';
+   searchButton.appendChild(imgButton);
+   const form = document.getElementById('registrar');
+
+   input.addEventListener('input', (e) => {
+      e.preventDefault();
+      console.log('Input!!!')
+
+   }); 
+
    //function removeElementsByClass found on Stack Overflow by Miguel Mota
    //https://stackoverflow.com/questions/34193751/js-remove-last-child
 
@@ -75,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ulPage.appendChild(listElement);
       //const button = createElement('button', 'textContent', `${i + 1}`)
       const button = createElement('button', 'type', `button`)
+      button.className = 'page-button';
       button.textContent = i + 1;
       ulPage.children[i].appendChild(button);
    }
@@ -82,16 +111,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 //get an array of all the buttons and set the first one to active
-const pageButtons = document.querySelectorAll('button');
-pageButtons[0].className = 'active';
+const pageButtons = document.querySelectorAll('.page-button');
+pageButtons[0].className = 'page-button active';
 
 //When click page buttons remove active class from current and add it to the clicked page.
    for(const item of pageButtons){
       item.addEventListener('click', (e) => { 
-         ulPage.children[currPageNum - 1].firstChild.className = '';
+         ulPage.children[currPageNum - 1].firstChild.className = 'page-button';
          currPageNum = +(e.target.textContent);
          showPage(currPageNum);
-         ulPage.children[currPageNum - 1].firstChild.className = 'active';
+         ulPage.children[currPageNum - 1].firstChild.className = 'page-button active';
       });
 }
 
