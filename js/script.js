@@ -9,8 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
    let startNumStudent = 0;
    const numPerPage = 9;
    let numPages = Math.ceil(endNumStudent/numPerPage);
+   let pageButtons;
+   
+   createPageButtons(numPages);
 
-   //
+
    function createElement(elementName, property, value){
       const element = document.createElement(elementName);
       element[property] = value;
@@ -37,6 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
    imgButton.alt = 'Search icon';
    searchButton.appendChild(imgButton);
    const form = document.getElementById('registrar');
+
+   const noSearchResults = createElement('h1', 'className', 'no-results');
+   noSearchResults.textContent = 'No Search Results';
+   ul.appendChild(noSearchResults);
+   
    //end of search function setting
 
    //search function listener
@@ -55,7 +63,15 @@ document.addEventListener('DOMContentLoaded', () => {
          } 
          
       }
-      showPage(1, searchArray)
+      if(searchArray.length > 0){
+         noSearchResults.style.display = 'hide';
+         const firstPage = 1;
+         showPage(firstPage, searchArray)
+      } else {
+         console.log('No results');
+         removeElementsByClass('student-item');
+         noSearchResults.style.display = 'block';
+      }
    }); 
 
    //function removeElementsByClass found on Stack Overflow by Miguel Mota
@@ -70,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
    //function to create a page of students
    function showPage(pageNum, data){
+      noSearchResults.style.display = 'none';
       let currNumPerPage = numPerPage;
       endNumStudent = data.length;
       //remove previous page
@@ -107,35 +124,45 @@ document.addEventListener('DOMContentLoaded', () => {
          joined.innerHTML = `Joined ${data[i].registered.date}`;
          div2.appendChild(joined)
       }
+      createPageButtons(numPages);
 }
 
 
 //create page buttons
-
+function createPageButtons(numPages){
+   removeElementsByClass('page-button-li');
    const ulPage = document.querySelector('.link-list');
    console.log('in button');
    console.log(numPages);
 
-  
+   
    for(let i = 0; i < numPages; i++){
-      const listElement = createElement('li', 'className', 'button-list');
+      const listElement = createElement('li', 'className', 'page-button-li');
       ulPage.appendChild(listElement);
       //const button = createElement('button', 'textContent', `${i + 1}`)
       const button = createElement('button', 'type', `button`)
-      button.className = 'page-button';
+      if(i !== 0){
+         button.className = 'page-button';
+      } else {
+         button.className = 'page-button active';
+      }
+
       button.textContent = i + 1;
       ulPage.children[i].appendChild(button);
    }
+   pageButtons = document.querySelectorAll('.page-button');
+}
 
-
+console.log(pageButtons);
 
 //get an array of all the buttons and set the first one to active
-const pageButtons = document.querySelectorAll('.page-button');
-pageButtons[0].className = 'page-button active';
+
+
+
 
 //When click page buttons remove active class from current and add it to the clicked page.
    for(const item of pageButtons){
-      item.addEventListener('click', (e) => { 
+      item.addEventListener('click', (e) => {
          ulPage.children[currPageNum - 1].firstChild.className = 'page-button';
          currPageNum = +(e.target.textContent);
          showPage(currPageNum, data);
